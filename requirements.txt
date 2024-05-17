@@ -1,1 +1,6 @@
 fastapi[all]
+yfinance
+pandas
+pydantic
+matplotlib
+numpy
