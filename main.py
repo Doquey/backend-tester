@@ -28,10 +28,12 @@ def start_test(jobstarter: JobStarter):
     backtester = BackTester(stocks, startDate, endDate,
                             jobstarter.method, jobstarter.initial_investiment, 0)
 
-    montante_final, portifolio_returns = backtester.run()
+    montante_final, portifolio_returns, return_per_stock = backtester.run()
     print("port : ", portifolio_returns, "type : ", type(portifolio_returns))
 
+    print("per_stock_return : ", return_per_stock)
     to_return = {"montante_final": montante_final,
-                 "portifolio_returns": list(portifolio_returns)}
+                 "portifolio_returns": list(portifolio_returns),
+                 "return_per_stock": return_per_stock}
 
     return to_return

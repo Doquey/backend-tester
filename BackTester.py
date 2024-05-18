@@ -43,7 +43,18 @@ class BackTester():
     def get_data(self, stocks: list, start: dt.datetime, end: dt.datetime) -> dict:
         stock_data = {}
         for stock in stocks:
-            stock_data[stock] = yf.download(stock, start=start, end=end)
+            current_start = start
+            while current_start <= end:
+                try:
+                    data = yf.download(stock, start=current_start, end=end)
+                    if not data.empty:
+                        stock_data[stock] = data
+                        break
+                except Exception as e:
+                    print(f"Exception for {stock}: {e}")
+                current_start += dt.timedelta(days=365)
+            else:
+                stock_data[stock] = []
         return stock_data
 
     def get_total_return(self, stock_data: pd.DataFrame, money_to_stock: float) -> float:
@@ -113,7 +124,7 @@ class BackTester():
         # self.plot_monthly_returns()
         portfolio_returns = np.sum(
             list(self.monthly_returns.values()), axis=0)
-        return self.total_return, portfolio_returns
+        return self.total_return, portfolio_returns, self.return_per_stock
 
 
 if __name__ == "__main__":
